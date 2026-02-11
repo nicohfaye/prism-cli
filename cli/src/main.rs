@@ -7,20 +7,6 @@ mod ui;
 use anyhow::{Context, Result};
 use clap::Parser;
 
-const BANNER: &str = r"
-       ___           ___                       ___           ___
-      /\  \         /\  \          ___        /\  \         /\__\
-     /::\  \       /::\  \        /\  \      /::\  \       /::|  |
-    /:/\:\  \     /:/\:\  \       \:\  \    /:/\ \  \     /:|:|  |
-   /::\~\:\  \   /::\~\:\  \      /::\__\  _\:\~\ \  \   /:/|:|__|__
-  /:/\:\ \:\__\ /:/\:\ \:\__\  __/:/\/__/ /\ \:\ \ \__\ /:/ |::::\__\
-  \/__\:\/:/  / \/_|::\/:/  / /\/:/  /    \:\ \:\ \/__/ \/__/~~/:/  /
-       \::/  /     |:|::/  /  \::/__/      \:\ \:\__\         /:/  /
-        \/__/      |:|\/__/    \:\__\       \:\/:/  /        /:/  /
-                   |:|  |       \/__/        \::/  /        /:/  /
-                    \|__|                     \/__/         \/__/
-";
-
 #[derive(Parser)]
 #[command(name = "prism", about = "K8s cluster monitor over SSH")]
 struct Cli {
@@ -37,7 +23,7 @@ async fn main() -> Result<()> {
         return run_demo().await;
     }
 
-    eprintln!("{}", BANNER);
+    eprintln!("{}", ui::theme::BANNER);
 
     // Load configuration.
     let cfg = config::Config::load().context(
@@ -74,7 +60,7 @@ async fn main() -> Result<()> {
 }
 
 async fn run_demo() -> Result<()> {
-    eprintln!("{}", BANNER);
+    eprintln!("{}", ui::theme::BANNER);
     eprintln!("  Running in demo mode...\n");
 
     // Brief pause so the banner is visible before TUI takes over.

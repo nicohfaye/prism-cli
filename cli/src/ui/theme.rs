@@ -1,6 +1,21 @@
 use ratatui::style::{Color, Modifier, Style};
 
-// ── Base palette ───────────────────────────────────────────
+// startup banner
+pub const BANNER: &str = r"
+       ___           ___                       ___           ___
+      /\  \         /\  \          ___        /\  \         /\__\
+     /::\  \       /::\  \        /\  \      /::\  \       /::|  |
+    /:/\:\  \     /:/\:\  \       \:\  \    /:/\ \  \     /:|:|  |
+   /::\~\:\  \   /::\~\:\  \      /::\__\  _\:\~\ \  \   /:/|:|__|__
+  /:/\:\ \:\__\ /:/\:\ \:\__\  __/:/\/__/ /\ \:\ \ \__\ /:/ |::::\__\
+  \/__\:\/:/  / \/_|::\/:/  / /\/:/  /    \:\ \:\ \/__/ \/__/~~/:/  /
+       \::/  /     |:|::/  /  \::/__/      \:\ \:\__\         /:/  /
+        \/__/      |:|\/__/    \:\__\       \:\/:/  /        /:/  /
+                   |:|  |       \/__/        \::/  /        /:/  /
+                    \|__|                     \/__/         \/__/
+";
+
+// base palette
 pub const SURFACE: Color = Color::Rgb(28, 28, 38);
 pub const BORDER: Color = Color::Rgb(58, 58, 78);
 pub const BORDER_FOCUSED: Color = Color::Rgb(120, 120, 220);
@@ -8,12 +23,12 @@ pub const TEXT: Color = Color::Rgb(200, 200, 220);
 pub const TEXT_DIM: Color = Color::Rgb(100, 100, 130);
 pub const ACCENT: Color = Color::Rgb(130, 140, 255);
 
-// ── Status colors ──────────────────────────────────────────
+// status colors
 pub const GREEN: Color = Color::Rgb(80, 220, 120);
 pub const YELLOW: Color = Color::Rgb(240, 200, 60);
 pub const RED: Color = Color::Rgb(240, 80, 80);
 
-// ── Reusable styles ────────────────────────────────────────
+// styles
 pub fn header() -> Style {
     Style::default().fg(ACCENT).add_modifier(Modifier::BOLD)
 }
