@@ -1,0 +1,11 @@
+[ssh]
+host = "vps.example.com"
+user = "root"
+port = 22
+# key_path = "~/.ssh/id_rsa"
+
+[kubernetes]
+kubeconfig = "kubeconfig.yaml"  
+# context = "default"       
+api_port = 6443                 
+local_port = 16443              
