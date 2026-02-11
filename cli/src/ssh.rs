@@ -13,15 +13,15 @@ pub struct SshTunnel {
 }
 
 impl SshTunnel {
-    /// Establish an SSH tunnel that forwards `local_port` to `remote_host:remote_port`.
+    /// Create an ssh tunnel that forwards `local_port` to `remote_host:remote_port`.
     pub async fn establish(ssh: &SshConfig, local_port: u16, remote_port: u16) -> Result<Self> {
         let forward = format!("{}:localhost:{}", local_port, remote_port);
 
         let mut cmd = Command::new("ssh");
         cmd.arg("-N") // no remote command
-            .arg("-L")
+            .arg("-L")  // bind/forward ports?
             .arg(&forward)
-            .arg("-p")
+            .arg("-p")  // port to connect to on remote host
             .arg(ssh.port.to_string())
             .arg("-o")
             .arg("StrictHostKeyChecking=accept-new")
@@ -41,11 +41,11 @@ impl SshTunnel {
 
         cmd.arg(format!("{}@{}", ssh.user, ssh.host));
 
-        // Capture stderr so it doesn't leak into the TUI.
+        // capture stderr to prevent leaks into tui
         cmd.stderr(Stdio::piped());
         cmd.stdout(Stdio::null());
 
-        // Kill on drop so the tunnel doesn't outlive the app.
+        // should not outlive app
         cmd.kill_on_drop(true);
 
         let child = cmd
@@ -54,9 +54,8 @@ impl SshTunnel {
 
         let mut tunnel = SshTunnel { child };
 
-        // Wait until the local port is reachable.
+        // wait until the local port is reachable.
         if let Err(e) = tunnel.wait_for_port(local_port).await {
-            // Read stderr from the ssh process for a useful error message.
             let stderr_msg = tunnel.read_stderr().await;
             let detail = if stderr_msg.is_empty() {
                 e.to_string()
@@ -106,7 +105,7 @@ impl SshTunnel {
 
 impl Drop for SshTunnel {
     fn drop(&mut self) {
-        // Best-effort kill if not already closed.
+        // idk
         #[allow(unused_must_use)]
         {
             self.child.start_kill().ok();

@@ -44,9 +44,9 @@ impl App {
         }
     }
 
-    /// Main run loop: poll K8s data and handle input.
+    /// Main loop: poll K8s data and handle input.
     pub async fn run(&mut self, terminal: &mut DefaultTerminal, client: &Client) -> Result<()> {
-        // Initial data fetch.
+        // initial data fetch
         self.refresh(client).await;
 
         let mut last_poll = std::time::Instant::now();
@@ -54,7 +54,7 @@ impl App {
         loop {
             terminal.draw(|f| ui::draw(f, self))?;
 
-            // Handle input events with a short timeout so we can check for auto-refresh.
+            // small timeout to handle input events
             if event::poll(TICK_RATE)? {
                 if let Event::Key(key) = event::read()? {
                     if key.kind == KeyEventKind::Press {
@@ -67,7 +67,7 @@ impl App {
                 break;
             }
 
-            // Auto-refresh.
+            // refresh
             if last_poll.elapsed() >= POLL_INTERVAL {
                 self.refresh(client).await;
                 last_poll = std::time::Instant::now();
@@ -77,7 +77,7 @@ impl App {
         Ok(())
     }
 
-    /// Demo run loop: no K8s client, just render static data and handle input.
+    /// Demo run loop
     pub async fn run_demo(&mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         loop {
             terminal.draw(|f| ui::draw(f, self))?;

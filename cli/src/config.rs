@@ -48,7 +48,6 @@ impl Config {
         Ok(config)
     }
 
-    /// Config lives next to the binary's Cargo.toml: `<project>/config.toml`
     fn config_path() -> PathBuf {
         let mut dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         dir.push("config.toml");

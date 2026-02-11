@@ -25,12 +25,12 @@ async fn main() -> Result<()> {
 
     eprintln!("{}", ui::theme::BANNER);
 
-    // Load configuration.
+    // load config
     let cfg = config::Config::load().context(
         "Could not load config. Create cli/config.toml — see config.example.toml for format.",
     )?;
 
-    // Establish SSH tunnel (prints before TUI takes over).
+    // connect ssh tunnel
     eprintln!(
         "  Connecting to {}@{}:{}...",
         cfg.ssh.user, cfg.ssh.host, cfg.ssh.port
@@ -41,18 +41,18 @@ async fn main() -> Result<()> {
             .context("Failed to establish SSH tunnel")?;
     eprintln!("  Tunnel ready on localhost:{}", cfg.kubernetes.local_port);
 
-    // Build Kubernetes client through the tunnel.
+    // build k8s client
     let client = k8s::build_client(&cfg)
         .await
         .context("Failed to connect to Kubernetes API")?;
     eprintln!("  Connected to cluster. Launching dashboard...\n");
 
-    // Enter TUI only after connection is established.
+    // enter tui after connection is up
     let mut terminal = ratatui::init();
     let mut app = app::App::new();
     let result = app.run(&mut terminal, &client).await;
 
-    // Restore terminal and clean up.
+    // restore & clean up
     ratatui::restore();
     tunnel.close().await.ok();
 
@@ -63,7 +63,7 @@ async fn run_demo() -> Result<()> {
     eprintln!("{}", ui::theme::BANNER);
     eprintln!("  Running in demo mode...\n");
 
-    // Brief pause so the banner is visible before TUI takes over.
+    // sleep for 1 sec to show banner in demo mode
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
     let mut terminal = ratatui::init();

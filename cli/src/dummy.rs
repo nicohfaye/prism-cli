@@ -1,5 +1,6 @@
 use crate::k8s;
 
+/// Dummy data to be used in --demo mode
 pub fn get_pods() -> Vec<k8s::PodInfo> {
     vec![
         k8s::PodInfo {

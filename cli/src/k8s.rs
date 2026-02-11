@@ -8,7 +8,7 @@ use std::time::SystemTime;
 
 use crate::config::Config as PrismConfig;
 
-/// Summary of a pod for display.
+/// Pod struct
 #[derive(Clone, Debug)]
 pub struct PodInfo {
     pub name: String,
@@ -18,7 +18,7 @@ pub struct PodInfo {
     pub age: String,
 }
 
-/// Summary of a deployment for display.
+/// Deployment struct
 #[derive(Clone, Debug)]
 pub struct DeploymentInfo {
     pub name: String,
@@ -28,7 +28,7 @@ pub struct DeploymentInfo {
     pub age: String,
 }
 
-/// Build a kube Client that connects through the SSH tunnel.
+/// Build a kube client that connects through the ssh tunnel.
 pub async fn build_client(config: &PrismConfig) -> Result<Client> {
     let kubeconfig_path = config.kubeconfig_path();
     let kubeconfig = Kubeconfig::read_from(&kubeconfig_path)
@@ -37,11 +37,11 @@ pub async fn build_client(config: &PrismConfig) -> Result<Client> {
     let mut kube_config =
         Config::try_from(kubeconfig).context("Failed to build kube config from kubeconfig file")?;
 
-    // Route through the SSH tunnel.
+    // Route through the ssh tunnel.
     let tunnel_url = format!("https://127.0.0.1:{}", config.kubernetes.local_port);
     kube_config.cluster_url = tunnel_url.parse().context("Invalid tunnel URL")?;
 
-    // The K8s API cert won't match localhost — the SSH tunnel provides security.
+    // ssh tunnel provides security
     kube_config.accept_invalid_certs = true;
 
     Client::try_from(kube_config).context("Failed to create Kubernetes client")
@@ -144,6 +144,7 @@ pub async fn fetch_deployments(client: &Client) -> Result<Vec<DeploymentInfo>> {
 }
 
 /// Format elapsed seconds into a human-friendly string like "2d", "5h", "13m".
+/// Could be moved to utils module?
 fn format_duration(secs: i64) -> String {
     let secs = secs.max(0);
     if secs < 60 {
