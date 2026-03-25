@@ -19,9 +19,9 @@ impl SshTunnel {
 
         let mut cmd = Command::new("ssh");
         cmd.arg("-N") // no remote command
-            .arg("-L")  // bind/forward ports?
+            .arg("-L") // bind/forward ports?
             .arg(&forward)
-            .arg("-p")  // port to connect to on remote host
+            .arg("-p") // port to connect to on remote host
             .arg(ssh.port.to_string())
             .arg("-o")
             .arg("StrictHostKeyChecking=accept-new")
