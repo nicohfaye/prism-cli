@@ -1,4 +1,4 @@
-# Prism-CLI
+# Prism CLI
 
 Terminal UI for monitoring Kubernetes clusters over SSH.
 
